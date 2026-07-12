@@ -1,0 +1,278 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🏠 宿泊先：Clubhouseアトリエ",
+        "description": "那須高原の宿泊先。那須ハイランドパークから徒歩6分。",
+        "marker-color": "#000000",
+        "marker-size": "large",
+        "marker-symbol": "lodging",
+        "area": "宿泊先"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.957119, 37.071762]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🏔️ A-1：殺生石",
+        "description": "【エリアA：山側・湯本】九尾の狐伝説の史跡。所要約30分。無料。",
+        "marker-color": "#e74c3c",
+        "marker-size": "medium",
+        "marker-symbol": "monument",
+        "area": "エリアA：山側・湯本"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.999945, 37.100148]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🏔️ A-2：那須温泉神社",
+        "description": "【エリアA：山側・湯本】殺生石のすぐ隣。歴史ある神社。所要約15分。無料。",
+        "marker-color": "#e74c3c",
+        "marker-size": "medium",
+        "marker-symbol": "religious-jewish",
+        "area": "エリアA：山側・湯本"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.998983, 37.099983]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🏔️ A-3：つつじ吊橋",
+        "description": "【エリアA：山側・湯本】全長130m・高さ38mの吊橋。所要約30分。無料。",
+        "marker-color": "#e74c3c",
+        "marker-size": "medium",
+        "marker-symbol": "bridge",
+        "area": "エリアA：山側・湯本"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.000832, 37.105838]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🏔️ A-4：那須高原展望台（恋人の聖地）",
+        "description": "【エリアA：山側・湯本】標高約1,000m。関東平野を一望。所要約15〜30分。無料。",
+        "marker-color": "#e74c3c",
+        "marker-size": "medium",
+        "marker-symbol": "viewpoint",
+        "area": "エリアA：山側・湯本"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.995515, 37.104926]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🏔️ A-5：南ヶ丘牧場 ⭐3日目おすすめ",
+        "description": "【エリアA：3日目メイン】入場・駐車場 無料。動物ふれあい、ソフトクリーム、体験メニュー豊富。所要1.5〜2時間。",
+        "marker-color": "#e74c3c",
+        "marker-size": "large",
+        "marker-symbol": "farm",
+        "area": "エリアA：山側・湯本"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.001335, 37.077415]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🌿 B-1：那須とりっくあーとぴあ",
+        "description": "【エリアB：街道中腹】体験型アート美術館。1館1,500円（10名以上 団体割引）。所要1館30〜40分。",
+        "marker-color": "#27ae60",
+        "marker-size": "medium",
+        "marker-symbol": "art-gallery",
+        "area": "エリアB：街道中腹"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.035975, 37.031435]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🌿 B-2：那須テディベア・ミュージアム",
+        "description": "【エリアB：街道中腹】トトロ展示も。大人1,800円。所要30〜60分。",
+        "marker-color": "#27ae60",
+        "marker-size": "medium",
+        "marker-symbol": "museum",
+        "area": "エリアB：街道中腹"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.039560, 37.049201]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🌿 B-3：那須ステンドグラス美術館",
+        "description": "【エリアB：街道中腹】英国風建築。パイプオルガン生演奏。大人1,600円。所要60〜120分。",
+        "marker-color": "#27ae60",
+        "marker-size": "medium",
+        "marker-symbol": "museum",
+        "area": "エリアB：街道中腹"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.024899, 37.065512]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🌿 B-4：チーズガーデン 那須本店",
+        "description": "【エリアB：街道中腹】御用邸チーズケーキの本店。カフェ併設。お土産に◎。無料。所要20〜30分。",
+        "marker-color": "#27ae60",
+        "marker-size": "medium",
+        "marker-symbol": "shop",
+        "area": "エリアB：街道中腹"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.023477, 37.028935]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🌿 B-5：乙女の滝",
+        "description": "【エリアB：街道中腹】落差10mの滝。天然の涼スポット。無料。所要15〜30分。",
+        "marker-color": "#27ae60",
+        "marker-size": "medium",
+        "marker-symbol": "water",
+        "area": "エリアB：街道中腹"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.937654, 37.066967]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🌿 B-6：りんどう湖ファミリー牧場（3日目）",
+        "description": "【エリアB：3日目メイン】アトラクション豊富。ジップライン。入場料あり。所要2〜3時間。",
+        "marker-color": "#27ae60",
+        "marker-size": "large",
+        "marker-symbol": "park",
+        "area": "エリアB：街道中腹"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.010000, 37.043000]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🌿 B-7：那須高原 清流の里",
+        "description": "【エリアB/C】釣り体験＋手打ちそば・うどん。入場無料（釣り有料）。所要30〜60分。",
+        "marker-color": "#27ae60",
+        "marker-size": "medium",
+        "marker-symbol": "water",
+        "area": "エリアB：街道中腹"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.030588, 37.025345]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🛍️ C-1：アジアンオールドバザール",
+        "description": "【エリアC：街道下部】タイ・バリ・ネパールの雑貨ショップ。エスニック料理も。入場無料。所要60〜120分。",
+        "marker-color": "#2980b9",
+        "marker-size": "medium",
+        "marker-symbol": "shop",
+        "area": "エリアC：街道下部・IC周辺"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.011825, 37.062745]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🛍️ C-2：道の駅 那須高原友愛の森",
+        "description": "【エリアC：街道下部】地元野菜・特産品の直売所。観光情報収集にも。入場無料。所要30〜60分。",
+        "marker-color": "#2980b9",
+        "marker-size": "medium",
+        "marker-symbol": "grocery",
+        "area": "エリアC：街道下部・IC周辺"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.01394, 37.04086]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🛍️ C-3：千本松牧場（3日目）",
+        "description": "【エリアC：3日目メイン】入場・駐車場 無料。ジンギスカンが名物。那須塩原IC近く。所要1〜2時間。",
+        "marker-color": "#2980b9",
+        "marker-size": "large",
+        "marker-symbol": "farm",
+        "area": "エリアC：街道下部・IC周辺"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.932798, 36.924375]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🛍️ C-4：那須ガーデンアウトレット（3日目）",
+        "description": "【エリアC：3日目ランチ＆お土産】フードコロシアム約350席。ロコスタイルマートでお土産も。那須塩原IC直結。所要1〜2時間。",
+        "marker-color": "#2980b9",
+        "marker-size": "large",
+        "marker-symbol": "shop",
+        "area": "エリアC：街道下部・IC周辺"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.991639, 36.966144]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "🌿 B-8：那須平成の森（ふれあいの森）",
+        "description": "【エリアC代替】旧御用邸の森。駒止の滝まで往復約3km。夏でも涼しい。無料。所要1.5〜2時間。",
+        "marker-color": "#2980b9",
+        "marker-size": "medium",
+        "marker-symbol": "park",
+        "area": "エリアC：街道下部・IC周辺"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.970000, 37.090000]
+      }
+    }
+  ]
+}
