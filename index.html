@@ -106,12 +106,18 @@
         .spot-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
 
         .spot-card {
+            width: 100%;
             padding: 14px 16px;
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.25s ease;
             border: 1px solid transparent;
             margin-bottom: 4px;
+            background: transparent;
+            color: inherit;
+            display: block;
+            font: inherit;
+            text-align: left;
         }
 
         .spot-card:hover {
@@ -151,6 +157,13 @@
             font-size: 11px;
             color: #64748b;
             margin-left: 20px;
+        }
+
+        .spot-list-message {
+            padding: 16px;
+            color: #94a3b8;
+            font-size: 13px;
+            line-height: 1.6;
         }
 
         /* ── Toggle Button ── */
@@ -471,49 +484,9 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 // ── Data ──
-const HOME = { lat: 37.071762, lng: 139.957119, name: "Clubhouseアトリエ（宿泊先）" };
-
-const spots = [
-    // Area A
-    { id: "a1", area: "A", name: "殺生石", lat: 37.100148, lng: 139.999945, time: "約30分", cost: "無料", day: "2日目",
-      desc: "九尾の狐伝説が残る史跡。硫黄の香りが漂う荒涼とした岩場の景観が特徴。駐車場から平坦な遊歩道で散策可能。隣接する賽の河原と合わせて回れる。" },
-    { id: "a2", area: "A", name: "那須温泉神社", lat: 37.099983, lng: 139.998983, time: "約15分", cost: "無料", day: "2日目",
-      desc: "殺生石のすぐ隣に位置する歴史ある神社。縁結び・商売繁盛のご利益があるとされ、参拝後は殺生石への散策ルートに繋がる。" },
-    { id: "a3", area: "A", name: "つつじ吊橋", lat: 37.105838, lng: 140.000832, time: "約30分", cost: "無料", day: "2日目",
-      desc: "全長130m・高さ38mの吊橋。橋の中央部分は足元が透けてスリル満点。駐車場から木道を徒歩5分で到着。絶景の写真スポット。" },
-    { id: "a4", area: "A", name: "那須高原展望台（恋人の聖地）", lat: 37.104926, lng: 139.995515, time: "約15〜30分", cost: "無料", day: "2日目",
-      desc: "標高約1,000mに位置する360度パノラマの展望台。晴天時は関東平野を一望でき、夜は星空が美しい。ドライブの休憩にも最適。" },
-    { id: "a5", area: "A", name: "南ヶ丘牧場 ⭐", lat: 37.077415, lng: 140.001335, time: "1.5〜2時間", cost: "入場無料", day: "3日目",
-      desc: "入場・駐車場 無料の観光牧場。動物ふれあい（めぇ〜めぇ〜広場300円）、名物ソフトクリーム、アイス作り体験1,700円、ソーセージ&バター作り2,200円、釣り堀300円+塩焼き650円。レストランでランチも可能。" },
-
-    // Area B
-    { id: "b1", area: "B", name: "那須とりっくあーとぴあ", lat: 37.031435, lng: 140.035975, time: "1館30〜40分", cost: "1館1,500円", day: "2日目",
-      desc: "目の錯覚を使った体験型アート美術館。3館構成（トリックアートの館・迷宮？館・ミケランジェロ館）。10名以上で団体割引あり。写真映えスポットとしてSNSで人気。全館回ると約2時間。" },
-    { id: "b2", area: "B", name: "那須テディベア・ミュージアム", lat: 37.049201, lng: 140.039560, time: "約30〜60分", cost: "大人1,800円", day: "2日目",
-      desc: "世界中のテディベアを展示。「となりのトトロ」のぬいぐるみ展やフォトスポットが人気。ワークショップでオリジナルベア制作も可能。中高生1,200円。" },
-    { id: "b3", area: "B", name: "那須ステンドグラス美術館", lat: 37.065512, lng: 140.024899, time: "約60〜120分", cost: "大人1,600円", day: "2日目",
-      desc: "英国コッツウォルズ地方をモチーフにした美しい建築。アンティークのステンドグラスが幻想的。パイプオルガンとオルゴールの生演奏を毎日開催。中高生1,000円。" },
-    { id: "b4", area: "B", name: "チーズガーデン 那須本店", lat: 37.028935, lng: 140.023477, time: "約20〜30分", cost: "無料", day: "2・3日目",
-      desc: "那須土産の定番「御用邸チーズケーキ」の本店。試食可能でカフェも併設。フィナンシェやチーズクッキーなどバリエーション豊富。常温持ち運びOK。" },
-    { id: "b5", area: "B", name: "乙女の滝", lat: 37.066967, lng: 139.937654, time: "約15〜30分", cost: "無料", day: "2日目",
-      desc: "落差約10m・幅5mの美しい滝。駐車場から階段を少し下るだけで到着。滝周辺は天然のクーラーのように涼しく、マイナスイオンたっぷり。足元が滑りやすいので注意。" },
-    { id: "b6", area: "B", name: "りんどう湖ファミリー牧場", lat: 37.043000, lng: 140.010000, time: "2〜3時間", cost: "入場料あり", day: "3日目",
-      desc: "湖を中心にアトラクションや動物ふれあいが楽しめるレジャーランド。ジップラインや湖上ボートなどアクティビティ豊富。レストランも複数あり。" },
-    { id: "b7", area: "B", name: "那須高原 清流の里", lat: 37.025345, lng: 140.030588, time: "約30〜60分", cost: "入場無料", day: "2・3日目",
-      desc: "那須連山の伏流水を利用した渓流釣り体験が人気。釣り竿・餌代200円＋魚代。併設の食事処で手打ちそば・うどんのランチも楽しめる。観光と食事を兼ねられる便利スポット。" },
-
-    // Area C
-    { id: "c1", area: "C", name: "アジアンオールドバザール", lat: 37.062745, lng: 140.011825, time: "約60〜120分", cost: "入場無料", day: "2・3日目",
-      desc: "那須にいながら異国情緒を味わえるスポット。タイ・バリ・ネパールの雑貨ショップが並び、エスニック料理のレストランも。お土産探しにもぴったり。" },
-    { id: "c2", area: "C", name: "道の駅 那須高原友愛の森", lat: 37.04086, lng: 140.01394, time: "約30〜60分", cost: "入場無料", day: "2日目",
-      desc: "那須観光の拠点となる道の駅。地元野菜・特産品の直売所があり、観光情報の収集にも便利。レンタサイクル（2時間500円〜）もあり。レストランでは地元食材の料理が楽しめる。" },
-    { id: "c3", area: "C", name: "那須平成の森（ふれあいの森）", lat: 37.090000, lng: 139.970000, time: "約1.5〜2時間", cost: "無料", day: "2日目",
-      desc: "かつての那須御用邸の森が一般開放されたエリア。駒止の滝まで往復約3kmのハイキングコース。木陰が多く夏でも涼しい。フィールドセンターでは30分無料ミニプログラムも。" },
-    { id: "c4", area: "C", name: "千本松牧場", lat: 36.924375, lng: 139.932798, time: "1〜2時間", cost: "入場無料", day: "3日目",
-      desc: "入場・駐車場 無料の広大な牧場。動物ふれあい・乗馬・サイクリングが楽しめる。名物のジンギスカンレストランでランチも。西那須野塩原ICから約1kmとアクセス抜群。" },
-    { id: "c5", area: "C", name: "那須ガーデンアウトレット", lat: 36.966144, lng: 139.991639, time: "1〜2時間", cost: "入場無料", day: "3日目",
-      desc: "リゾート型アウトレットモール。フードコロシアム（約350席）では各自好きなものを選べるので大人数に最適。ロコスタイルマートで那須の特産品・お菓子・乳製品のお土産も豊富。那須塩原IC直結で帰路にスムーズ。" },
-];
+const DATA_URL = 'nasu_sightseeing_map.geojson';
+let HOME = { lat: 37.071762, lng: 139.957119, name: "Clubhouseアトリエ（宿泊先）" };
+let spots = [];
 
 // ── Map init ──
 const map = L.map('map', {
@@ -533,53 +506,139 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r
 const markers = {};
 let routeLine = null;
 let selectedId = null;
-
-// Home marker
-const homeIcon = L.divIcon({
-    className: '',
-    html: '<div class="custom-marker home" style="width:20px;height:20px;position:relative"><div class="marker-label">🏠</div></div>',
-    iconSize: [20, 20],
-    iconAnchor: [10, 10]
-});
-
-const homeMarker = L.marker([HOME.lat, HOME.lng], { icon: homeIcon }).addTo(map);
-homeMarker.bindTooltip(HOME.name, { direction: 'top', offset: [0, -12] });
+let homeMarker = null;
 
 // Spot markers
 const areaClass = { A: 'area-a', B: 'area-b', C: 'area-c' };
 const areaColor = { A: '#ef4444', B: '#22c55e', C: '#3b82f6' };
+const areaLabel = {
+    A: '🏔️ エリアA：山側・湯本',
+    B: '🌿 エリアB：街道中腹',
+    C: '🛍️ エリアC：街道下部・IC周辺'
+};
 
-spots.forEach((s, i) => {
+loadSightseeingData();
+
+async function loadSightseeingData() {
+    const list = document.getElementById('spotList');
+    list.innerHTML = '<div class="spot-list-message">目的地リストを読み込み中...</div>';
+
+    try {
+        const response = await fetch(DATA_URL);
+        if (!response.ok) throw new Error(`GeoJSONを読み込めませんでした: ${response.status}`);
+        const geojson = await response.json();
+        setupFromGeoJson(geojson);
+    } catch (error) {
+        console.error(error);
+        list.innerHTML = '<div class="spot-list-message">目的地リストを読み込めませんでした。GitHub Pagesまたはローカルサーバーから開いてください。</div>';
+    }
+}
+
+function setupFromGeoJson(geojson) {
+    const features = (geojson.features || []).filter(f => f.geometry?.type === 'Point');
+    const homeFeature = features.find(f => f.properties?.areaCode === 'HOME');
+    if (homeFeature) HOME = normalizeFeature(homeFeature);
+
+    addHomeMarker();
+
+    spots = features
+        .filter(f => f.properties?.areaCode !== 'HOME')
+        .map(normalizeFeature)
+        .filter(s => s.area && s.lat && s.lng);
+
+    spots.forEach(addSpotMarker);
+    renderList(currentArea);
+
+    const bounds = L.latLngBounds([[HOME.lat, HOME.lng], ...spots.map(s => [s.lat, s.lng])]);
+    map.fitBounds(bounds, { padding: [48, 48], maxZoom: 12 });
+}
+
+function normalizeFeature(feature) {
+    const props = feature.properties || {};
+    const [lng, lat] = feature.geometry.coordinates;
+    const fallbackId = `${props.areaCode || 'spot'}-${lat}-${lng}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+    return {
+        id: props.id || fallbackId,
+        domId: escapeAttr(props.id || fallbackId),
+        area: props.areaCode || inferAreaCode(props.area),
+        areaName: props.area || '',
+        name: props.shortName || stripPrefix(props.name || '名称未設定'),
+        fullName: props.name || props.shortName || '名称未設定',
+        lat,
+        lng,
+        time: props.time || '-',
+        cost: props.cost || '-',
+        day: props.day || '-',
+        desc: props.detail || props.description || '',
+        markerSize: props['marker-size'] || 'medium'
+    };
+}
+
+function inferAreaCode(areaName) {
+    if (!areaName) return '';
+    if (areaName.includes('エリアA')) return 'A';
+    if (areaName.includes('エリアB')) return 'B';
+    if (areaName.includes('エリアC')) return 'C';
+    return '';
+}
+
+function stripPrefix(name) {
+    return name.replace(/^[^\s]+\s+[ABC]-\d+：/, '').replace(/^宿泊先：/, '');
+}
+
+function addHomeMarker() {
+    if (homeMarker) map.removeLayer(homeMarker);
+
+    const homeIcon = L.divIcon({
+        className: '',
+        html: '<div class="custom-marker home" style="width:20px;height:20px;position:relative"><div class="marker-label">🏠</div></div>',
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+    });
+
+    homeMarker = L.marker([HOME.lat, HOME.lng], { icon: homeIcon }).addTo(map);
+    homeMarker.bindTooltip(HOME.name, { direction: 'top', offset: [0, -12] });
+}
+
+function addSpotMarker(s) {
+    const size = s.markerSize === 'large' ? 20 : 16;
     const icon = L.divIcon({
         className: '',
-        html: `<div class="custom-marker ${areaClass[s.area]}" id="marker-${s.id}" style="width:16px;height:16px;"></div>`,
-        iconSize: [16, 16],
-        iconAnchor: [8, 8]
+        html: `<div class="custom-marker ${areaClass[s.area]}" id="marker-${s.domId}" style="width:${size}px;height:${size}px;"></div>`,
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2]
     });
 
     const marker = L.marker([s.lat, s.lng], { icon: icon }).addTo(map);
     marker.bindTooltip(s.name, { direction: 'top', offset: [0, -10] });
-    marker.on('click', () => selectSpot(s.id));
+    marker.on('click', (event) => {
+        L.DomEvent.stopPropagation(event);
+        selectSpot(s.id);
+    });
     markers[s.id] = marker;
-});
+}
 
 // ── Spot List ──
 function renderList(area) {
     const list = document.getElementById('spotList');
     const filtered = area === 'all' ? spots : spots.filter(s => s.area === area);
 
+    if (!filtered.length) {
+        list.innerHTML = '<div class="spot-list-message">表示できる目的地がありません。</div>';
+        return;
+    }
+
     list.innerHTML = filtered.map(s => `
-        <div class="spot-card ${selectedId === s.id ? 'selected' : ''}" id="card-${s.id}" onclick="selectSpot('${s.id}')">
+        <button class="spot-card ${selectedId === s.id ? 'selected' : ''}" id="card-${s.domId}" type="button" onclick="selectSpot('${escapeJs(s.id)}')">
             <div class="spot-label">
                 <div class="spot-dot ${areaClass[s.area]}"></div>
-                <span class="spot-name">${s.name}</span>
+                <span class="spot-name">${escapeHtml(s.name)}</span>
             </div>
-            <div class="spot-meta">${s.time}　|　${s.cost}　|　${s.day}</div>
-        </div>
+            <div class="spot-meta">${escapeHtml(s.time)}　|　${escapeHtml(s.cost)}　|　${escapeHtml(s.day)}</div>
+        </button>
     `).join('');
 }
-
-renderList('all');
 
 // ── Filter ──
 let currentArea = 'all';
@@ -596,12 +655,20 @@ function filterArea(area) {
 
     // Show/hide markers
     spots.forEach(s => {
+        const marker = markers[s.id];
+        if (!marker) return;
+
         if (area === 'all' || s.area === area) {
-            markers[s.id].addTo(map);
+            marker.addTo(map);
         } else {
-            map.removeLayer(markers[s.id]);
+            map.removeLayer(marker);
         }
     });
+
+    const selectedSpot = spots.find(s => s.id === selectedId);
+    if (selectedSpot && area !== 'all' && selectedSpot.area !== area) {
+        closeDetail();
+    }
 }
 
 // ── Select Spot ──
@@ -612,12 +679,12 @@ function selectSpot(id) {
 
     // Update cards
     document.querySelectorAll('.spot-card').forEach(c => c.classList.remove('selected'));
-    const card = document.getElementById(`card-${id}`);
+    const card = document.getElementById(`card-${s.domId}`);
     if (card) card.classList.add('selected');
 
     // Update markers
     document.querySelectorAll('.custom-marker').forEach(m => m.classList.remove('selected'));
-    const markerEl = document.getElementById(`marker-${id}`);
+    const markerEl = document.getElementById(`marker-${s.domId}`);
     if (markerEl) markerEl.classList.add('selected');
 
     // Draw route
@@ -637,39 +704,38 @@ function selectSpot(id) {
 
     // Badge class
     const badgeCls = s.area === 'A' ? 'badge-a' : s.area === 'B' ? 'badge-b' : 'badge-c';
-    const areaLabel = s.area === 'A' ? '🏔️ エリアA：山側・湯本' : s.area === 'B' ? '🌿 エリアB：街道中腹' : '🛍️ エリアC：街道下部・IC周辺';
 
     // Google Maps directions URL
     const gmapUrl = `https://www.google.com/maps/dir/${HOME.lat},${HOME.lng}/${s.lat},${s.lng}`;
 
     // Show detail
     document.getElementById('detailContent').innerHTML = `
-        <span class="detail-area-badge ${badgeCls}">${areaLabel}</span>
-        <h2 class="detail-title">${s.name}</h2>
+        <span class="detail-area-badge ${badgeCls}">${escapeHtml(areaLabel[s.area] || s.areaName || '目的地')}</span>
+        <h2 class="detail-title">${escapeHtml(s.name)}</h2>
         <div class="detail-info-grid">
             <div class="info-box">
                 <div class="label">所要時間</div>
-                <div class="value">${s.time}</div>
+                <div class="value">${escapeHtml(s.time)}</div>
             </div>
             <div class="info-box">
                 <div class="label">費用</div>
-                <div class="value">${s.cost}</div>
+                <div class="value">${escapeHtml(s.cost)}</div>
             </div>
             <div class="info-box">
                 <div class="label">おすすめ日</div>
-                <div class="value">${s.day}</div>
+                <div class="value">${escapeHtml(s.day)}</div>
             </div>
         </div>
-        <p class="detail-description">${s.desc}</p>
+        <p class="detail-description">${escapeHtml(s.desc)}</p>
         <div class="route-info">
             <div class="route-icon">🚗</div>
             <div class="route-text">
                 <div class="route-label">宿（Clubhouseアトリエ）からの距離</div>
-                <div class="route-value">約 ${dist.toFixed(1)} km ─ 車で約 ${driveTime} 分</div>
+                <div class="route-value">約 ${dist.toFixed(1)} km / 車で約 ${driveTime} 分</div>
             </div>
         </div>
         <a class="google-maps-btn" href="${gmapUrl}" target="_blank" rel="noopener">
-            📍 Google Maps で経路を開く →
+            📍 Google Maps で経路を開く
         </a>
     `;
     document.getElementById('detailPanel').classList.add('visible');
@@ -697,6 +763,24 @@ function calcDistance(lat1, lng1, lat2, lng2) {
               Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
               Math.sin(dLng/2) * Math.sin(dLng/2);
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[char]));
+}
+
+function escapeAttr(value) {
+    return String(value).replace(/[^a-zA-Z0-9_-]/g, '') || 'spot';
+}
+
+function escapeJs(value) {
+    return String(value).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 }
 
 // Close detail on map click

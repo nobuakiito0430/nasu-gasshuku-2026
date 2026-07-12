@@ -4,9 +4,16 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "home",
+        "areaCode": "HOME",
         "name": "🏠 宿泊先：Clubhouseアトリエ",
+        "shortName": "Clubhouseアトリエ",
         "description": "那須高原の宿泊先。那須ハイランドパークから徒歩6分。",
-        "marker-color": "#000000",
+        "detail": "合宿中の宿泊拠点。各観光地への出発地点として地図上に固定表示します。",
+        "time": "宿泊先",
+        "cost": "-",
+        "day": "拠点",
+        "marker-color": "#f59e0b",
         "marker-size": "large",
         "marker-symbol": "lodging",
         "area": "宿泊先"
@@ -16,12 +23,18 @@
         "coordinates": [139.957119, 37.071762]
       }
     },
-
     {
       "type": "Feature",
       "properties": {
+        "id": "a1",
+        "areaCode": "A",
         "name": "🏔️ A-1：殺生石",
+        "shortName": "殺生石",
         "description": "【エリアA：山側・湯本】九尾の狐伝説の史跡。所要約30分。無料。",
+        "detail": "九尾の狐伝説が残る史跡。硫黄の香りが漂う荒涼とした岩場の景観が特徴。駐車場から平坦な遊歩道で散策可能。隣接する賽の河原と合わせて回れる。",
+        "time": "約30分",
+        "cost": "無料",
+        "day": "2日目",
         "marker-color": "#e74c3c",
         "marker-size": "medium",
         "marker-symbol": "monument",
@@ -35,11 +48,18 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "a2",
+        "areaCode": "A",
         "name": "🏔️ A-2：那須温泉神社",
+        "shortName": "那須温泉神社",
         "description": "【エリアA：山側・湯本】殺生石のすぐ隣。歴史ある神社。所要約15分。無料。",
+        "detail": "殺生石のすぐ隣に位置する歴史ある神社。縁結び・商売繁盛のご利益があるとされ、参拝後は殺生石への散策ルートに繋がる。",
+        "time": "約15分",
+        "cost": "無料",
+        "day": "2日目",
         "marker-color": "#e74c3c",
         "marker-size": "medium",
-        "marker-symbol": "religious-jewish",
+        "marker-symbol": "religious-site",
         "area": "エリアA：山側・湯本"
       },
       "geometry": {
@@ -50,8 +70,15 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "a3",
+        "areaCode": "A",
         "name": "🏔️ A-3：つつじ吊橋",
+        "shortName": "つつじ吊橋",
         "description": "【エリアA：山側・湯本】全長130m・高さ38mの吊橋。所要約30分。無料。",
+        "detail": "全長130m・高さ38mの吊橋。橋の中央部分は足元が透けてスリルがあり、駐車場から木道を徒歩5分ほどで到着。絶景の写真スポット。",
+        "time": "約30分",
+        "cost": "無料",
+        "day": "2日目",
         "marker-color": "#e74c3c",
         "marker-size": "medium",
         "marker-symbol": "bridge",
@@ -65,8 +92,15 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "a4",
+        "areaCode": "A",
         "name": "🏔️ A-4：那須高原展望台（恋人の聖地）",
+        "shortName": "那須高原展望台",
         "description": "【エリアA：山側・湯本】標高約1,000m。関東平野を一望。所要約15〜30分。無料。",
+        "detail": "標高約1,000mに位置する展望台。晴天時は関東平野を一望でき、ドライブ途中の休憩にも向く。夜は星空スポットとしても人気。",
+        "time": "約15〜30分",
+        "cost": "無料",
+        "day": "2日目",
         "marker-color": "#e74c3c",
         "marker-size": "medium",
         "marker-symbol": "viewpoint",
@@ -80,8 +114,15 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "a5",
+        "areaCode": "A",
         "name": "🏔️ A-5：南ヶ丘牧場 ⭐3日目おすすめ",
+        "shortName": "南ヶ丘牧場",
         "description": "【エリアA：3日目メイン】入場・駐車場 無料。動物ふれあい、ソフトクリーム、体験メニュー豊富。所要1.5〜2時間。",
+        "detail": "入場・駐車場無料の観光牧場。動物ふれあい、名物ソフトクリーム、アイス作り、ソーセージ・バター作り、釣り堀など体験メニューが多い。レストランでランチも可能。",
+        "time": "1.5〜2時間",
+        "cost": "入場無料",
+        "day": "3日目",
         "marker-color": "#e74c3c",
         "marker-size": "large",
         "marker-symbol": "farm",
@@ -92,12 +133,18 @@
         "coordinates": [140.001335, 37.077415]
       }
     },
-
     {
       "type": "Feature",
       "properties": {
+        "id": "b1",
+        "areaCode": "B",
         "name": "🌿 B-1：那須とりっくあーとぴあ",
+        "shortName": "那須とりっくあーとぴあ",
         "description": "【エリアB：街道中腹】体験型アート美術館。1館1,500円（10名以上 団体割引）。所要1館30〜40分。",
+        "detail": "目の錯覚を使った体験型アート美術館。3館構成で、10名以上なら団体割引あり。写真を撮りながら回るタイプなので、班行動にも向く。",
+        "time": "1館30〜40分",
+        "cost": "1館1,500円",
+        "day": "2日目",
         "marker-color": "#27ae60",
         "marker-size": "medium",
         "marker-symbol": "art-gallery",
@@ -111,8 +158,15 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "b2",
+        "areaCode": "B",
         "name": "🌿 B-2：那須テディベア・ミュージアム",
+        "shortName": "那須テディベア・ミュージアム",
         "description": "【エリアB：街道中腹】トトロ展示も。大人1,800円。所要30〜60分。",
+        "detail": "世界中のテディベアを展示するミュージアム。トトロ関連展示やフォトスポットもあり、短時間でも立ち寄りやすい。",
+        "time": "約30〜60分",
+        "cost": "大人1,800円",
+        "day": "2日目",
         "marker-color": "#27ae60",
         "marker-size": "medium",
         "marker-symbol": "museum",
@@ -126,8 +180,15 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "b3",
+        "areaCode": "B",
         "name": "🌿 B-3：那須ステンドグラス美術館",
+        "shortName": "那須ステンドグラス美術館",
         "description": "【エリアB：街道中腹】英国風建築。パイプオルガン生演奏。大人1,600円。所要60〜120分。",
+        "detail": "英国風建築とアンティークのステンドグラスが見どころ。パイプオルガンやオルゴールの生演奏があり、落ち着いて過ごせる屋内候補。",
+        "time": "約60〜120分",
+        "cost": "大人1,600円",
+        "day": "2日目",
         "marker-color": "#27ae60",
         "marker-size": "medium",
         "marker-symbol": "museum",
@@ -141,8 +202,15 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "b4",
+        "areaCode": "B",
         "name": "🌿 B-4：チーズガーデン 那須本店",
+        "shortName": "チーズガーデン 那須本店",
         "description": "【エリアB：街道中腹】御用邸チーズケーキの本店。カフェ併設。お土産に◎。無料。所要20〜30分。",
+        "detail": "那須土産の定番「御用邸チーズケーキ」の本店。カフェ併設で、短時間のお土産購入にも使いやすい。常温持ち運びできる商品も多い。",
+        "time": "約20〜30分",
+        "cost": "無料",
+        "day": "2・3日目",
         "marker-color": "#27ae60",
         "marker-size": "medium",
         "marker-symbol": "shop",
@@ -156,8 +224,15 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "b5",
+        "areaCode": "B",
         "name": "🌿 B-5：乙女の滝",
+        "shortName": "乙女の滝",
         "description": "【エリアB：街道中腹】落差10mの滝。天然の涼スポット。無料。所要15〜30分。",
+        "detail": "落差約10m・幅5mの滝。駐車場から階段を少し下ると到着し、夏場の涼スポットとして使いやすい。足元が滑りやすい点に注意。",
+        "time": "約15〜30分",
+        "cost": "無料",
+        "day": "2日目",
         "marker-color": "#27ae60",
         "marker-size": "medium",
         "marker-symbol": "water",
@@ -171,8 +246,15 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "b6",
+        "areaCode": "B",
         "name": "🌿 B-6：りんどう湖ファミリー牧場（3日目）",
+        "shortName": "りんどう湖ファミリー牧場",
         "description": "【エリアB：3日目メイン】アトラクション豊富。ジップライン。入場料あり。所要2〜3時間。",
+        "detail": "湖を中心にアトラクションや動物ふれあいを楽しめるレジャーランド。ジップラインや湖上ボートなどアクティビティが多く、まとまった時間を取る候補。",
+        "time": "2〜3時間",
+        "cost": "入場料あり",
+        "day": "3日目",
         "marker-color": "#27ae60",
         "marker-size": "large",
         "marker-symbol": "park",
@@ -186,8 +268,15 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "b7",
+        "areaCode": "B",
         "name": "🌿 B-7：那須高原 清流の里",
+        "shortName": "那須高原 清流の里",
         "description": "【エリアB/C】釣り体験＋手打ちそば・うどん。入場無料（釣り有料）。所要30〜60分。",
+        "detail": "那須連山の伏流水を利用した渓流釣り体験が人気。併設の食事処で手打ちそば・うどんも楽しめ、観光と食事を兼ねられる。",
+        "time": "約30〜60分",
+        "cost": "入場無料",
+        "day": "2・3日目",
         "marker-color": "#27ae60",
         "marker-size": "medium",
         "marker-symbol": "water",
@@ -198,12 +287,18 @@
         "coordinates": [140.030588, 37.025345]
       }
     },
-
     {
       "type": "Feature",
       "properties": {
+        "id": "c1",
+        "areaCode": "C",
         "name": "🛍️ C-1：アジアンオールドバザール",
+        "shortName": "アジアンオールドバザール",
         "description": "【エリアC：街道下部】タイ・バリ・ネパールの雑貨ショップ。エスニック料理も。入場無料。所要60〜120分。",
+        "detail": "タイ・バリ・ネパールの雑貨ショップやエスニック料理のレストランが集まる施設。お土産探しや食事候補として使いやすい。",
+        "time": "約60〜120分",
+        "cost": "入場無料",
+        "day": "2・3日目",
         "marker-color": "#2980b9",
         "marker-size": "medium",
         "marker-symbol": "shop",
@@ -217,8 +312,15 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "c2",
+        "areaCode": "C",
         "name": "🛍️ C-2：道の駅 那須高原友愛の森",
+        "shortName": "道の駅 那須高原友愛の森",
         "description": "【エリアC：街道下部】地元野菜・特産品の直売所。観光情報収集にも。入場無料。所要30〜60分。",
+        "detail": "那須観光の拠点になる道の駅。地元野菜・特産品の直売所があり、観光情報収集や短時間の休憩、お土産購入に便利。",
+        "time": "約30〜60分",
+        "cost": "入場無料",
+        "day": "2日目",
         "marker-color": "#2980b9",
         "marker-size": "medium",
         "marker-symbol": "grocery",
@@ -226,14 +328,21 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [140.01394, 37.04086]
+        "coordinates": [140.013940, 37.040860]
       }
     },
     {
       "type": "Feature",
       "properties": {
+        "id": "c3",
+        "areaCode": "C",
         "name": "🛍️ C-3：千本松牧場（3日目）",
+        "shortName": "千本松牧場",
         "description": "【エリアC：3日目メイン】入場・駐車場 無料。ジンギスカンが名物。那須塩原IC近く。所要1〜2時間。",
+        "detail": "入場・駐車場無料の広大な牧場。動物ふれあい、乗馬、サイクリングを楽しめる。名物のジンギスカンレストランでランチも可能。",
+        "time": "1〜2時間",
+        "cost": "入場無料",
+        "day": "3日目",
         "marker-color": "#2980b9",
         "marker-size": "large",
         "marker-symbol": "farm",
@@ -247,8 +356,15 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "c4",
+        "areaCode": "C",
         "name": "🛍️ C-4：那須ガーデンアウトレット（3日目）",
+        "shortName": "那須ガーデンアウトレット",
         "description": "【エリアC：3日目ランチ＆お土産】フードコロシアム約350席。ロコスタイルマートでお土産も。那須塩原IC直結。所要1〜2時間。",
+        "detail": "リゾート型アウトレットモール。フードコロシアムは席数が多く、大人数の昼食候補にしやすい。ロコスタイルマートで那須のお土産も探せる。",
+        "time": "1〜2時間",
+        "cost": "入場無料",
+        "day": "3日目",
         "marker-color": "#2980b9",
         "marker-size": "large",
         "marker-symbol": "shop",
@@ -262,8 +378,15 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "🌿 B-8：那須平成の森（ふれあいの森）",
+        "id": "c5",
+        "areaCode": "C",
+        "name": "🛍️ C-5：那須平成の森（ふれあいの森）",
+        "shortName": "那須平成の森",
         "description": "【エリアC代替】旧御用邸の森。駒止の滝まで往復約3km。夏でも涼しい。無料。所要1.5〜2時間。",
+        "detail": "旧那須御用邸の森を一般開放した自然散策エリア。駒止の滝まで往復約3kmのコースがあり、木陰が多く夏でも比較的涼しい。",
+        "time": "約1.5〜2時間",
+        "cost": "無料",
+        "day": "2日目",
         "marker-color": "#2980b9",
         "marker-size": "medium",
         "marker-symbol": "park",
