@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>那須観光マップ — 蝶名林ゼミ 夏合宿2026</title>
+<meta name="description" content="蝶名林ゼミ夏合宿2026の那須観光スポットを地図で確認できるインタラクティブマップ。カテゴリー別フィルタ付き。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<style>
+  :root {
+    --cat1: #e67e22;
+    --cat2: #8e44ad;
+    --cat3: #2980b9;
+    --lunch: #d35400;
+    --home: #f59e0b;
+    --ink: #1d2a2b;
+    --muted: #5b6f6b;
+    --paper: #fbf8f1;
+    --deep: #155042;
+    --green: #1f7a61;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ── Layout ── */
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    height: 100dvh;
+  }
+
+  /* ── Header ── */
+  .topbar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, var(--deep), #1a6b55);
+    color: #fff;
+    z-index: 1000;
+    box-shadow: 0 2px 12px rgba(0,0,0,.18);
+  }
+  .topbar h1 {
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 1.2;
+    flex: 1;
+  }
+  .topbar .sub {
+    font-size: 10px;
+    font-weight: 400;
+    opacity: .8;
+    display: block;
+  }
+  .topbar-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: rgba(255,255,255,.15);
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .legend-toggle {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,.15);
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+    transition: background .15s;
+  }
+  .legend-toggle:active { background: rgba(255,255,255,.3); }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    flex-shrink: 0;
+    display: flex;
+    gap: 6px;
+    padding: 8px 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #fff;
+    border-bottom: 1px solid #e8ebe9;
+    z-index: 999;
+    scrollbar-width: none;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+
+  .filter-chip {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 2px solid;
+    background: #fff;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: .15s;
+    white-space: nowrap;
+  }
+  .filter-chip .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .filter-chip.active {
+    color: #fff;
+  }
+  .filter-chip:not(.active) {
+    opacity: .5;
+  }
+
+  /* ── Map ── */
+  #map {
+    flex: 1;
+    z-index: 1;
+  }
+
+  /* ── Custom markers ── */
+  .custom-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    border: 2.5px solid #fff;
+    cursor: pointer;
+    transition: transform .15s;
+  }
+  .custom-marker:hover {
+    transform: rotate(-45deg) scale(1.15);
+  }
+  .custom-marker .marker-emoji {
+    transform: rotate(45deg);
+    font-size: 15px;
+    line-height: 1;
+  }
+  .custom-marker.home-marker {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #fff;
+    box-shadow: 0 3px 12px rgba(0,0,0,.35);
+    z-index: 10 !important;
+  }
+  .custom-marker.home-marker .marker-emoji {
+    font-size: 18px;
+  }
+
+  /* ── Bottom Sheet ── */
+  .sheet-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    z-index: 2000;
+    animation: fadeIn .2s;
+  }
+  .sheet-overlay.open { display: block; }
+
+  .bottom-sheet {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    max-height: 70vh;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    z-index: 2001;
+    box-shadow: 0 -4px 24px rgba(0,0,0,.15);
+    overflow: hidden;
+    animation: slideUp .25s ease-out;
+  }
+  .bottom-sheet.open { display: flex; flex-direction: column; }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .sheet-handle {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 6px;
+  }
+  .sheet-handle::after {
+    content: "";
+    width: 36px; height: 4px;
+    border-radius: 2px;
+    background: #ccc;
+  }
+
+  .sheet-content {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 18px 24px;
+  }
+
+  .sheet-cat {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .sheet-name {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--deep);
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+
+  .sheet-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .sheet-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: #f4f7f5;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .sheet-meta-item .meta-icon {
+    font-size: 14px;
+  }
+
+  .sheet-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+
+  .sheet-detail {
+    font-size: 12px;
+    line-height: 1.65;
+    color: var(--muted);
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #f8faf9;
+    border: 1px solid #e8ebe9;
+  }
+
+  .sheet-nav-btn {
+    display: block;
+    width: 100%;
+    margin-top: 14px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: var(--deep);
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+    text-align: center;
+    transition: background .15s;
+  }
+  .sheet-nav-btn:active { background: #0e3a2e; }
+
+  /* ── Spot Count ── */
+  .spot-count {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: rgba(29,42,43,.85);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    z-index: 998;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    pointer-events: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,.2);
+    transition: opacity .3s;
+  }
+
+  /* ── Leaflet overrides ── */
+  .leaflet-control-zoom { border-radius: 10px !important; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.15) !important; }
+  .leaflet-control-zoom a { width: 36px !important; height: 36px !important; line-height: 36px !important; font-size: 18px !important; }
+  .leaflet-popup { display: none; }
+
+  /* ── Desktop tweaks ── */
+  @media (min-width: 768px) {
+    .topbar { padding: 12px 20px; }
+    .topbar h1 { font-size: 18px; }
+    .filter-bar { padding: 10px 20px; gap: 8px; justify-content: center; }
+    .filter-chip { font-size: 12px; padding: 7px 16px; }
+    .bottom-sheet { max-width: 420px; left: 50%; transform: translateX(-50%); border-radius: 20px 20px 0 0; }
+    .sheet-overlay { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Header -->
+  <header class="topbar">
+    <div class="topbar-icon">🗺️</div>
+    <h1>那須観光マップ<span class="sub">蝶名林ゼミ 夏合宿2026</span></h1>
+    <button class="legend-toggle" id="legendToggle" aria-label="凡例" title="凡例">📋</button>
+  </header>
+
+  <!-- Filter chips -->
+  <nav class="filter-bar" id="filterBar" aria-label="カテゴリーフィルター"></nav>
+
+  <!-- Map -->
+  <div id="map"></div>
+
+  <!-- Spot count -->
+  <div class="spot-count" id="spotCount"></div>
+</div>
+
+<!-- Bottom Sheet -->
+<div class="sheet-overlay" id="sheetOverlay"></div>
+<div class="bottom-sheet" id="sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-content" id="sheetContent"></div>
+</div>
+
+<script>
+(() => {
+  // ─── GeoJSON Data (embedded) ───
+  const spots = [
+    {
+      id: "home", category: "拠点", emoji: "🏠",
+      name: "宿泊先：Clubhouseアトリエ",
+      shortName: "Clubhouseアトリエ",
+      description: "那須高原の宿泊先。那須ハイランドパークから徒歩6分。",
+      detail: "合宿中の宿泊拠点。各観光地への出発地点。",
+      time: "宿泊先", cost: "-", day: "拠点",
+      color: "#f59e0b",
+      coords: [37.071762, 139.957119]
+    },
+    {
+      id: "cat1-1", category: "カテゴリー1：牧場・体験系", emoji: "🐄",
+      name: "南ヶ丘牧場",
+      shortName: "南ヶ丘牧場",
+      description: "入場・駐車場 無料。動物ふれあい、ソフトクリーム、体験メニュー豊富。",
+      detail: "入場・駐車場無料の観光牧場。動物ふれあい300円、名物ガーンジィソフトクリーム、アイス作り1,700円、釣り堀300円+塩焼き650円、アーチェリー800円、パターゴルフ800円など体験メニューが多い。レストランでランチも可能。",
+      time: "1.5〜2時間", cost: "入場無料（体験別途）", day: "3日目",
+      color: "#e67e22",
+      coords: [37.077415, 140.001335]
+    },
+    {
+      id: "cat1-2", category: "カテゴリー1：牧場・体験系", emoji: "🐄",
+      name: "りんどう湖ファミリー牧場",
+      shortName: "りんどう湖ファミリー牧場",
+      description: "アトラクション豊富。ジップライン・湖上ボート・動物ふれあい。",
+      detail: "湖を中心にアトラクションや動物ふれあいを楽しめるレジャーランド。ジップラインや湖上ボートなどアクティビティが多い。単券300〜1,000円 / 乗り放題4,900円。",
+      time: "2〜3時間", cost: "入場料あり", day: "3日目",
+      color: "#e67e22",
+      coords: [37.043000, 140.010000]
+    },
+    {
+      id: "cat1-3", category: "カテゴリー1：牧場・体験系", emoji: "🐄",
+      name: "千本松牧場",
+      shortName: "千本松牧場",
+      description: "入場・駐車場 無料。乗馬・サイクリング・迷路。アルパカに会える！",
+      detail: "入場・駐車場無料の広大な牧場。動物ふれあい、乗馬、サイクリング、とうもろこし巨大迷路、温泉あり。名物のジンギスカンレストランでランチも可能。那須塩原IC近く。",
+      time: "1〜2時間", cost: "入場無料", day: "3日目",
+      color: "#e67e22",
+      coords: [36.924375, 139.932798]
+    },
+    {
+      id: "cat2-1", category: "カテゴリー2：ミュージアム・アート系", emoji: "🎨",
+      name: "那須とりっくあーとぴあ",
+      shortName: "トリックアート",
+      description: "体験型アート美術館。写真撮りまくり！10名以上で団体割引あり。",
+      detail: "目の錯覚を使った体験型アート美術館。3館構成で、10名以上なら団体割引あり。写真を撮りながら回るタイプなので、班行動にも向く。",
+      time: "1館30〜40分", cost: "1館1,500円", day: "3日目",
+      color: "#8e44ad",
+      coords: [37.031435, 140.035975]
+    },
+    {
+      id: "cat2-2", category: "カテゴリー2：ミュージアム・アート系", emoji: "🎨",
+      name: "那須テディベア・ミュージアム",
+      shortName: "テディベア",
+      description: "トトロ展示も。コンパクトだが可愛い空間。",
+      detail: "世界中のテディベアを展示するミュージアム。トトロ関連展示やフォトスポットもあり、短時間でも立ち寄りやすい。",
+      time: "30〜60分", cost: "大人1,700円", day: "3日目",
+      color: "#8e44ad",
+      coords: [37.049201, 140.039560]
+    },
+    {
+      id: "cat2-3", category: "カテゴリー2：ミュージアム・アート系", emoji: "🎨",
+      name: "那須ステンドグラス美術館",
+      shortName: "ステンドグラス",
+      description: "英国風建築。パイプオルガン・オルゴール生演奏。完全屋内。",
+      detail: "英国風建築とアンティークのステンドグラスが見どころ。パイプオルガンやオルゴールの生演奏あり。⚠️ 水曜日休館のため日程確認を。",
+      time: "60〜120分", cost: "大人1,600円", day: "3日目",
+      color: "#8e44ad",
+      coords: [37.065512, 140.024899]
+    },
+    {
+      id: "cat2-4", category: "カテゴリー2：ミュージアム・アート系", emoji: "🎨",
+      name: "乙女の滝",
+      shortName: "乙女の滝",
+      description: "落差10m・幅5mの天然涼スポット。駐車場無料。",
+      detail: "落差約10m・幅5mの滝。駐車場から階段を少し下ると到着し、夏場の涼スポットとして使いやすい。足元が滑りやすい点に注意。",
+      time: "15〜30分", cost: "無料", day: "3日目",
+      color: "#8e44ad",
+      coords: [37.066967, 139.937654]
+    },
+    {
+      id: "cat3-1", category: "カテゴリー3：お土産・グルメ系", emoji: "🛍️",
+      name: "チーズガーデン 那須本店",
+      shortName: "チーズガーデン",
+      description: "御用邸チーズケーキの本店。カフェ併設。那須土産の定番。",
+      detail: "那須土産の定番「御用邸チーズケーキ」の本店。カフェ併設で短時間のお土産購入にも使いやすい。常温持ち運びできる商品も多い。",
+      time: "20〜30分", cost: "無料", day: "3日目",
+      color: "#2980b9",
+      coords: [37.028935, 140.023477]
+    },
+    {
+      id: "cat3-2", category: "カテゴリー3：お土産・グルメ系", emoji: "🛍️",
+      name: "アジアンオールドバザール",
+      shortName: "アジアンバザール",
+      description: "タイ・バリ・ネパールの雑貨ショップ。エスニック料理も。",
+      detail: "タイ・バリ・ネパールの雑貨ショップやエスニック料理のレストランが集まる施設。お土産探しや食事候補として使いやすい。ランチ可（1,200〜1,600円）。",
+      time: "60〜120分", cost: "入場無料", day: "3日目",
+      color: "#2980b9",
+      coords: [37.062745, 140.011825]
+    },
+    {
+      id: "cat3-3", category: "カテゴリー3：お土産・グルメ系", emoji: "🛍️",
+      name: "那須ガーデンアウトレット",
+      shortName: "アウトレット",
+      description: "フードコロシアム約350席。ロコスタイルマートでお土産。那須塩原IC直結。",
+      detail: "リゾート型アウトレットモール。フードコロシアムは席数が多く大人数の昼食候補にしやすい。ロコスタイルマートで那須のお土産も探せる。那須塩原IC直結で帰路にも便利。",
+      time: "1〜2時間", cost: "入場無料", day: "3日目",
+      color: "#2980b9",
+      coords: [36.966144, 139.991639]
+    },
+    {
+      id: "cat3-4", category: "カテゴリー3：お土産・グルメ系", emoji: "🛍️",
+      name: "那須高原 清流の里",
+      shortName: "清流の里",
+      description: "釣り体験＋手打ちそば・うどん。入場無料（釣り有料）。",
+      detail: "那須連山の伏流水を利用した渓流釣り体験が人気。併設の食事処で手打ちそば・うどんも楽しめ、観光と食事を兼ねられる。",
+      time: "30〜60分", cost: "入場無料（釣り有料 約1,000円）", day: "3日目",
+      color: "#2980b9",
+      coords: [37.025345, 140.030588]
+    },
+    {
+      id: "cat3-5", category: "カテゴリー3：お土産・グルメ系", emoji: "🛍️",
+      name: "道の駅 那須高原友愛の森",
+      shortName: "道の駅 友愛の森",
+      description: "地元野菜・特産品直売所。観光情報収集にも◎。",
+      detail: "那須観光の拠点になる道の駅。地元野菜・特産品の直売所があり、観光情報収集や短時間の休憩、お土産購入に便利。トリックアートピア前売り券が200円OFF。",
+      time: "30〜60分", cost: "入場無料", day: "3日目",
+      color: "#2980b9",
+      coords: [37.040860, 140.013940]
+    },
+    {
+      id: "cat3-6", category: "カテゴリー3：お土産・グルメ系", emoji: "🛍️",
+      name: "バターのいとこ",
+      shortName: "バターのいとこ",
+      description: "新食感スイーツ。SNSで大人気のお土産。",
+      detail: "新食感スイーツで話題のお店。SNSで大人気。チーズガーデンの近くにあり、3日目エリアAのお土産ルートに組み込みやすい。",
+      time: "約15分", cost: "無料（購入別途）", day: "3日目",
+      color: "#2980b9",
+      coords: [37.029800, 140.025200]
+    },
+    {
+      id: "lunch-1", category: "🍽️ 昼食候補", emoji: "🍽️",
+      name: "水車の里 瑞穂蔵",
+      shortName: "瑞穂蔵",
+      description: "釜炊きご飯の田舎膳。古民家風で雰囲気◎。駐車場50台。",
+      detail: "2日目エリアAおすすめ。釜炊きご飯の田舎膳が名物。古民家風の落ち着いた空間。ご飯おかわりOK。大型駐車場完備で団体対応◎。\n📞 0287-76-7550 / 営業 11:00〜15:30 / ⚠️水曜定休",
+      time: "約60分", cost: "1,300〜1,900円", day: "2日目",
+      color: "#d35400",
+      coords: [37.080000, 139.985000]
+    },
+    {
+      id: "lunch-2", category: "🍽️ 昼食候補", emoji: "🍽️",
+      name: "ステーキハウス寿楽 本店",
+      shortName: "寿楽",
+      description: "那須和牛ステーキの名店。★4.1。テレビでも紹介。",
+      detail: "老舗精肉店が営むステーキハウス。那須和牛のステーキやハンバーグが人気。テレビでも紹介された名店。混雑必至のため予約推奨。",
+      time: "約60分", cost: "1,500〜3,000円", day: "2日目",
+      color: "#d35400",
+      coords: [37.064500, 140.020800]
+    },
+    {
+      id: "lunch-3", category: "🍽️ 昼食候補", emoji: "🍽️",
+      name: "那須高原バル",
+      shortName: "那須高原バル",
+      description: "那須和牛100%ハンバーグ。最大32名・バスP有。団体専用メニューで提供が早い。",
+      detail: "2日目エリアBおすすめ。那須和牛100%ハンバーグが人気。最大32名まで対応可。バス駐車場あり。団体専用メニューで提供が早い。\n📞 0287-73-5214 / 営業 11:30〜21:00 / 年中無休",
+      time: "約60分", cost: "1,300〜2,000円", day: "2日目",
+      color: "#d35400",
+      coords: [37.048000, 140.026500]
+    },
+    {
+      id: "lunch-4", category: "🍽️ 昼食候補", emoji: "🍽️",
+      name: "ペニー・レイン 那須店",
+      shortName: "ペニーレイン",
+      description: "ビートルズの世界観。名物ブルーベリーブレッド。⚠️予約不可・大人気。",
+      detail: "ビートルズの世界観をテーマにしたベーカリーレストラン。名物のブルーベリーブレッドは大人気。予約不可のため並ぶ可能性あり。",
+      time: "約60分", cost: "1,200〜2,900円", day: "2日目",
+      color: "#d35400",
+      coords: [37.073000, 140.018000]
+    },
+    {
+      id: "lunch-5", category: "🍽️ 昼食候補", emoji: "🍽️",
+      name: "たべものや SION",
+      shortName: "SION",
+      description: "★4.4。セットランチ人気・テラス席あり。",
+      detail: "セットランチが人気のカフェレストラン。テラス席で那須の自然を感じながら食事できる。Google ★4.4の高評価。",
+      time: "約60分", cost: "1,000〜2,000円", day: "2・3日目",
+      color: "#d35400",
+      coords: [37.058000, 140.025000]
+    },
+    {
+      id: "lunch-6", category: "🍽️ 昼食候補", emoji: "🍽️",
+      name: "古民家カフェ yumeya",
+      shortName: "yumeya",
+      description: "★4.3。ベジタリアンメニューあり。",
+      detail: "古民家を改装したおしゃれなカフェ。ベジタリアンメニューもあり、幅広い食の好みに対応。Google ★4.3。",
+      time: "約60分", cost: "1,000〜2,000円", day: "2・3日目",
+      color: "#d35400",
+      coords: [37.055000, 140.016000]
+    },
+    {
+      id: "lunch-7", category: "🍽️ 昼食候補", emoji: "🍽️",
+      name: "茶屋 卯三郎",
+      shortName: "卯三郎",
+      description: "★4.4。おこわ・もち定食が大人気。",
+      detail: "おこわ・もち定食が名物の和食茶屋。Google ★4.4の高評価。和の雰囲気の中で那須の味覚を堪能できる。",
+      time: "約60分", cost: "約1,500円", day: "2・3日目",
+      color: "#d35400",
+      coords: [37.060000, 140.022000]
+    },
+    {
+      id: "lunch-8", category: "🍽️ 昼食候補", emoji: "🍽️",
+      name: "南ヶ丘牧場 庄屋",
+      shortName: "庄屋（牧場内）",
+      description: "南ヶ丘牧場内。ジンギスカン・ハンバーグ。40名対応可。",
+      detail: "3日目エリアAおすすめ。南ヶ丘牧場内にあるレストラン。ジンギスカン・ハンバーグ・カレーなど。40名まで団体対応可。牧場から移動不要で時間効率◎。",
+      time: "約60分", cost: "1,000〜1,800円", day: "3日目",
+      color: "#d35400",
+      coords: [37.077000, 140.001800]
+    },
+    {
+      id: "lunch-9", category: "🍽️ 昼食候補", emoji: "🍽️",
+      name: "なすとらん（道の駅内）",
+      shortName: "なすとらん",
+      description: "道の駅内。那須和牛・地元野菜。112席。",
+      detail: "道の駅 那須高原友愛の森の中にあるレストラン。那須和牛や地元野菜を使ったメニュー。112席で大人数でも入りやすい。",
+      time: "約60分", cost: "1,300〜2,000円", day: "3日目",
+      color: "#d35400",
+      coords: [37.041000, 140.014200]
+    }
+  ];
+
+  // ─── Category config ───
+  const categories = [
+    { key: "拠点", label: "🏠 宿泊先", color: "#f59e0b", emoji: "🏠" },
+    { key: "カテゴリー1：牧場・体験系", label: "🐄 牧場・体験", color: "#e67e22", emoji: "🐄" },
+    { key: "カテゴリー2：ミュージアム・アート系", label: "🎨 ミュージアム", color: "#8e44ad", emoji: "🎨" },
+    { key: "カテゴリー3：お土産・グルメ系", label: "🛍️ お土産・グルメ", color: "#2980b9", emoji: "🛍️" },
+    { key: "🍽️ 昼食候補", label: "🍽️ 昼食候補", color: "#d35400", emoji: "🍽️" }
+  ];
+
+  // ─── State ───
+  const activeCategories = new Set(categories.map(c => c.key));
+  const markers = [];
+
+  // ─── Init Map ───
+  const map = L.map('map', {
+    center: [37.045, 140.00],
+    zoom: 12,
+    zoomControl: true,
+    attributionControl: true
+  });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 18
+  }).addTo(map);
+
+  // ─── Create markers ───
+  function createMarkerIcon(spot) {
+    const isHome = spot.id === 'home';
+    const div = document.createElement('div');
+    div.className = 'custom-marker' + (isHome ? ' home-marker' : '');
+    div.style.backgroundColor = spot.color;
+    div.innerHTML = `<span class="marker-emoji">${spot.emoji}</span>`;
+    return L.divIcon({
+      html: div.outerHTML,
+      className: '',
+      iconSize: isHome ? [40, 40] : [34, 34],
+      iconAnchor: isHome ? [20, 40] : [17, 34],
+      popupAnchor: [0, -34]
+    });
+  }
+
+  spots.forEach(spot => {
+    const marker = L.marker(spot.coords, {
+      icon: createMarkerIcon(spot),
+      zIndexOffset: spot.id === 'home' ? 1000 : 0
+    });
+    marker._spotData = spot;
+    marker.on('click', () => openSheet(spot));
+    marker.addTo(map);
+    markers.push(marker);
+  });
+
+  // ─── Filter bar ───
+  const filterBar = document.getElementById('filterBar');
+  categories.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-chip active';
+    btn.dataset.key = cat.key;
+    btn.style.borderColor = cat.color;
+    btn.style.backgroundColor = cat.color;
+    btn.style.color = '#fff';
+    btn.innerHTML = `<span class="dot" style="background:#fff"></span>${cat.label}`;
+
+    btn.addEventListener('click', () => {
+      if (activeCategories.has(cat.key)) {
+        activeCategories.delete(cat.key);
+        btn.classList.remove('active');
+        btn.style.backgroundColor = '#fff';
+        btn.style.color = cat.color;
+        btn.querySelector('.dot').style.background = cat.color;
+      } else {
+        activeCategories.add(cat.key);
+        btn.classList.add('active');
+        btn.style.backgroundColor = cat.color;
+        btn.style.color = '#fff';
+        btn.querySelector('.dot').style.background = '#fff';
+      }
+      updateVisibility();
+    });
+    filterBar.appendChild(btn);
+  });
+
+  function updateVisibility() {
+    let visibleCount = 0;
+    markers.forEach(m => {
+      const cat = m._spotData.category;
+      if (activeCategories.has(cat)) {
+        m.addTo(map);
+        visibleCount++;
+      } else {
+        map.removeLayer(m);
+      }
+    });
+    document.getElementById('spotCount').textContent =
+      `表示中：${visibleCount} / ${spots.length} スポット`;
+  }
+  updateVisibility();
+
+  // ─── Bottom Sheet ───
+  const sheet = document.getElementById('sheet');
+  const sheetContent = document.getElementById('sheetContent');
+  const overlay = document.getElementById('sheetOverlay');
+
+  function openSheet(spot) {
+    const catConfig = categories.find(c => c.key === spot.category) || categories[0];
+    const detailLines = spot.detail.split('\n').map(l => l.trim()).filter(Boolean);
+
+    sheetContent.innerHTML = `
+      <span class="sheet-cat" style="background:${spot.color}">${spot.category}</span>
+      <h2 class="sheet-name">${spot.emoji} ${spot.name}</h2>
+      <div class="sheet-meta">
+        <div class="sheet-meta-item"><span class="meta-icon">⏱</span>${spot.time}</div>
+        <div class="sheet-meta-item"><span class="meta-icon">💰</span>${spot.cost}</div>
+        <div class="sheet-meta-item"><span class="meta-icon">📅</span>${spot.day}</div>
+      </div>
+      <p class="sheet-desc">${spot.description}</p>
+      <div class="sheet-detail">${detailLines.join('<br>')}</div>
+      <a class="sheet-nav-btn"
+         href="https://www.google.com/maps/dir/?api=1&destination=${spot.coords[0]},${spot.coords[1]}&travelmode=driving"
+         target="_blank" rel="noopener">
+        📍 Google Mapsでナビを開く
+      </a>
+    `;
+    sheet.classList.add('open');
+    overlay.classList.add('open');
+  }
+
+  function closeSheet() {
+    sheet.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+
+  overlay.addEventListener('click', closeSheet);
+
+  // Swipe down to close
+  let touchStartY = 0;
+  sheet.addEventListener('touchstart', e => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  sheet.addEventListener('touchmove', e => {
+    const dy = e.touches[0].clientY - touchStartY;
+    if (dy > 60) closeSheet();
+  }, { passive: true });
+
+  // ─── Legend toggle: fit all visible markers ───
+  document.getElementById('legendToggle').addEventListener('click', () => {
+    const visible = markers.filter(m => map.hasLayer(m));
+    if (visible.length) {
+      const group = L.featureGroup(visible);
+      map.fitBounds(group.getBounds().pad(0.08));
+    }
+  });
+
+  // ─── Resize handler ───
+  window.addEventListener('resize', () => map.invalidateSize());
+})();
+</script>
+</body>
+</html>
